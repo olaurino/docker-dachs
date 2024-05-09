@@ -1,4 +1,4 @@
-FROM debian:bookworm
+FROM debian:bookworm-slim
 
 LABEL Description=DaCHS\ is\ a\ publishing\ infrastructure\ for\ the\ Virtual\ Observatory. \
       Reference=http://arxiv.org/abs/1408.5733
@@ -12,10 +12,12 @@ RUN DEBIAN_FRONTEND='noninteractive' \
       gnupg2 \
       locales \
       procps \
+      subversion \
       sudo \
       vim \
       wget \
-    && apt-get clean
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # BUILD argument for extra repositories (besides debian/stable) to install dachs.
 # Options are:
@@ -33,10 +35,9 @@ COPY etc/apt_sources.list "$_APT_SOURCES"
 # This is the brute-force solution for Debian;
 # I am having problems in set locales non-interactively,
 # and since I really need the "C/UTF8" for postgres, will just set it for all.
-ENV LC_ALL=C.UTF-8
-RUN echo LC_ALL="$LC_ALL" > /etc/default/locale
-
-RUN sed -i 's/exit 101/exit 0/' /usr/sbin/policy-rc.d
+ENV LC_ALL=C.UTF-8 
+RUN echo LC_ALL="$LC_ALL" > /etc/default/locale \
+    && sed -i 's/exit 101/exit 0/' /usr/sbin/policy-rc.d
 # ---
 
 # Setup GAVO key, then repositories according to INSTALL_REPO
@@ -67,6 +68,7 @@ RUN DEBIAN_FRONTEND='noninteractive'              && \
     apt-get update                                && \
     apt-get install -y gavodachs2-server          && \
     apt-get clean                                 && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
     gavo serve stop && service postgresql stop
 
 ## Read Dachs version from just-installed package
@@ -79,9 +81,7 @@ COPY etc/gavo.rc "$GAVO_SETTINGS"
 ENV GAVO_PORT=8080
 EXPOSE $GAVO_PORT
 
-COPY bin/help.sh /help.sh
-COPY bin/dachs.sh /dachs.sh
-COPY bin/start.sh /start.sh
+COPY bin/* /
 
 ENTRYPOINT ["/bin/bash"]
 CMD ["--rcfile", "/help.sh"]
