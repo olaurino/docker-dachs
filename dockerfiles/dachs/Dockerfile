@@ -82,6 +82,7 @@ ENV GAVO_PORT=8080
 EXPOSE $GAVO_PORT
 
 COPY bin/* /
+COPY data /var/gavo/inputs/data
 
 ENTRYPOINT ["/bin/bash"]
 CMD ["--rcfile", "/help.sh"]
