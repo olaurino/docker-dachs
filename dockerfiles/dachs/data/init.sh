@@ -6,11 +6,18 @@ dachs imp //obs-radio
 
 cd /var/gavo/inputs/data/chandra/data
 bash cscdownload.txt
+for f in *.gz
+do
+  gunzip $f
+done
 cd ..
+python3 make_source_files.py
 dachs imp q
+dachs publish q
 
 cd /var/gavo/inputs/data/sma/
 dachs imp q
+dachs publish q
 
 tail -f /dev/null
 

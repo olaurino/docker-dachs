@@ -12,6 +12,7 @@
     <meta name="schema-rank">100</meta>
 
     <meta name="facility">SMA</meta>
+    <meta name="subject">Survey</meta>
 
     <table id="main" onDisk="True">
         <meta name="description">Prototype SMA Service</meta>
