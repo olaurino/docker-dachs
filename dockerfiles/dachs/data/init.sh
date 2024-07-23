@@ -5,7 +5,8 @@ dachs imp //obscore
 dachs imp //obs-radio
 
 cd /var/gavo/inputs/data/chandra/data
-bash cscdownload.txt
+bash cscdownload.txt  # Cen A
+bash cscdownload.3.txt  # SDSS source in bootes
 for f in *.gz
 do
   gunzip $f

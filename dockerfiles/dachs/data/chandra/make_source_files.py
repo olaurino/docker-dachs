@@ -25,7 +25,7 @@ def generate_xml_snippet(table):
 
 
 # Read the VOTable
-votable_file = "data/table_csc2.master_source-cda.cfa.harvard.edu.vot"
+votable_file = "data/table_csc21.master_source-sdss-bootes-cda.cfa.harvard.edu.vot"
 votable = parse(votable_file)
 table = votable.get_first_table()
 col_names = [f.name for f in table.fields]
